@@ -11,6 +11,9 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"]
 }

@@ -1,31 +1,39 @@
 {
-  "name": "google-sheets-import-json",
+  "name": "google-sheets-export-json",
   "version": "0.0.1",
-  "description": "Import json file to google sheets",
-  "main": "index.js",
+  "description": "Export Google Sheets to JSON",
+  "main": "lib/index.js",
+  "bin": {
+    "gsej": "./bin/run"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint . --ext .js,.ts",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev readme"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vdelacou/google-sheets-import-json.git"
+    "url": "git+https://github.com/vdelacou/google-sheets-export-json.git"
   },
   "keywords": [
     "Google",
     "sheets",
     "gsheet",
     "json",
-    "import",
+    "export",
     "oauth2"
   ],
   "author": "vincent.delacourt@gmail.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vdelacou/google-sheets-import-json/issues"
+    "url": "https://github.com/vdelacou/google-sheets-export-json/issues"
   },
-  "homepage": "https://github.com/vdelacou/google-sheets-import-json#readme",
+  "homepage": "https://github.com/vdelacou/google-sheets-export-json#readme",
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/lodash.merge": "^4.6.6",
@@ -51,10 +59,15 @@
     }
   },
   "dependencies": {
+    "@oclif/command": "^1.8.0",
     "dotenv": "^10.0.0",
     "googleapis": "^73.0.0",
     "googleapis-common": "^5.0.2",
     "lodash.merge": "^4.6.2",
     "winston": "^3.3.3"
-  }
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "types": "lib/index.d.ts"
 }

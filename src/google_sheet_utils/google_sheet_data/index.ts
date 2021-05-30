@@ -1,6 +1,5 @@
-import { google } from 'googleapis';
-import { OAuth2Client } from 'googleapis-common';
-import { FIRST_ROW_NOT_FOUND, NO_GOOGLE_ACCESS_TOKEN, NO_GOOGLE_CLIENT_ID, NO_GOOGLE_CLIENT_SECRET, NO_GOOGLE_REFRESH_TOKEN, SHEET_GRID_DATA_NOT_FOUND } from '../../error_code';
+import { sheets_v4 } from 'googleapis';
+import { FIRST_ROW_NOT_FOUND, SHEET_DATA_NOT_FOUND, SHEET_GRID_DATA_NOT_FOUND } from '../../error_code';
 import { findSheetByTitle } from '../find_sheet_by_title';
 
 /**
@@ -13,15 +12,14 @@ import { findSheetByTitle } from '../find_sheet_by_title';
  * @throws {SHEET_GRID_DATA_NOT_FOUND}
  * @throws {SHEET_TITLE_NOT_FOUND}
  */
-export const getSheetData = async (spreadsheetId: string, sheetTitle: string) => {
-  const oAuth2Client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET);
-  oAuth2Client.credentials = { access_token: process.env.GOOGLE_ACCESS_TOKEN, refresh_token: process.env.GOOGLE_REFRESH_TOKEN };
-  const sheetClient = google.sheets({ version: 'v4', auth: oAuth2Client });
-  return sheetClient;
+export const getSheetData = async (sheetClient: sheets_v4.Sheets, spreadsheetId: string, sheetTitle: string): Promise<sheets_v4.Schema$GridData> => {
   const spreadsheet = await sheetClient.spreadsheets.get({
     includeGridData: true,
     spreadsheetId,
   });
+  if (!spreadsheet.data.sheets) {
+    throw new Error(SHEET_DATA_NOT_FOUND);
+  }
   const sheet = findSheetByTitle(spreadsheet.data.sheets, sheetTitle);
   // check if we have first row
   const { data } = sheet;
@@ -33,23 +31,4 @@ export const getSheetData = async (spreadsheetId: string, sheetTitle: string) =>
   }
 
   return data[0];
-};
-
-/**
- * Need have environement variable GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GOOGLE_ACCESS_TOKEN GOOGLE_REFRESH_TOKEN
- *
- */
-export const validGoogleEnvironnementVariable = (): void => {
-  if (!process.env.GOOGLE_CLIENT_ID) {
-    throw new Error(NO_GOOGLE_CLIENT_ID);
-  }
-  if (!process.env.GOOGLE_CLIENT_SECRET) {
-    throw new Error(NO_GOOGLE_CLIENT_SECRET);
-  }
-  if (!process.env.GOOGLE_ACCESS_TOKEN) {
-    throw new Error(NO_GOOGLE_ACCESS_TOKEN);
-  }
-  if (!process.env.GOOGLE_REFRESH_TOKEN) {
-    throw new Error(NO_GOOGLE_REFRESH_TOKEN);
-  }
 };
