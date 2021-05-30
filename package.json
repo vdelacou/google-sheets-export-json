@@ -14,7 +14,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.ts",
     "start": "ts-node ./src/index.ts",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev readme"
+    "prepack": "rm -rf lib && tsc -d"
   },
   "repository": {
     "type": "git",

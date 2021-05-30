@@ -31,14 +31,13 @@ class Gsej extends Command {
       const result = await exportJson(args.spreadsheet_id, args.sheet_title, config);
       this.log(JSON.stringify(result));
     } catch (e) {
-      this.error(e);
-      // this.error('Google Oauth Config', {
-      //   suggestions: [
-      //     'create .env file, (try our helper: https://github.com/vdelacou/iblis-cli-token-google-oauth-web-server)',
-      //     'add options --clientId=clientId --clientSecret=clientSecret --accessToken=accessToken --refreshToken=refreshToken',
-      //   ],
-      //   ref: 'https://github.com/vdelacou/google-sheets-export-json#readme',
-      // });
+      this.error(e, {
+        suggestions: [
+          'create .env file, (try our helper: https://github.com/vdelacou/iblis-cli-token-google-oauth-web-server)',
+          'add options --clientId=clientId --clientSecret=clientSecret --accessToken=accessToken --refreshToken=refreshToken',
+        ],
+        ref: 'https://github.com/vdelacou/google-sheets-export-json#readme',
+      });
     }
   }
 }
